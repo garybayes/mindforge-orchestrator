@@ -10,7 +10,6 @@ on:
 permissions:
   issues: write
   contents: write
-  metadata: read
 
 jobs:
   nightly_sweep:

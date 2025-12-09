@@ -16,7 +16,6 @@ on:
 permissions:
   issues: write
   contents: write
-  metadata: read
 
 jobs:
   handle_issue_event:

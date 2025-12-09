@@ -8,7 +8,6 @@ on:
 permissions:
   issues: read
   contents: write
-  metadata: read
 
 jobs:
   self_test:
