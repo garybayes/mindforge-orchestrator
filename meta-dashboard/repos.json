@@ -1,0 +1,32 @@
+{
+  "repositories": [
+    {
+      "id": "orchestrator_core",
+      "owner": "garybayes",
+      "repo": "mindforge-orchestrator-core",
+      "workflow": "build.yml",
+      "display_name": "Orchestrator Core Engine"
+    },
+    {
+      "id": "orchestrator_app",
+      "owner": "garybayes",
+      "repo": "mindforge-orchestrator",
+      "workflow": "orchestrator-self-test.yml",
+      "display_name": "Orchestrator GitHub App"
+    },
+    {
+      "id": "saas_app",
+      "owner": "garybayes",
+      "repo": "saas-app",
+      "workflow": "build-and-test.yml",
+      "display_name": "MindForge SaaS Platform"
+    },
+    {
+      "id": "book_repo",
+      "owner": "garybayes",
+      "repo": "remote-workers-survival-guide",
+      "workflow": "orchestrator-self-test.yml",
+      "display_name": "Book Workflow Automation"
+    }
+  ]
+}

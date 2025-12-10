@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>MindForge Orchestrator — Meta Dashboard</title>
-  <style>
-    body { font-family: Arial; background:#1e1e1e; color:white; padding:20px;}
-    .repo { margin-bottom:20px; padding:15px; background:#2b2b2b; border-radius:8px;}
-    .title { font-size:22px; margin-bottom:10px;}
-    .ok { color:#84ff84; }
-    .warn { color:#ffcc44; }
-    .fail { color:#ff6464; }
-  </style>
-</head>
-<body>
-  <h1>MindForge Orchestrator — Meta Dashboard</h1>
+  <head>
+    <title>MindForge Orchestrator — Meta Dashboard</title>
+    <style>
+      body { font-family: Arial; background: #111; color: #eee; padding: 20px; }
+      .repo { padding: 15px; margin: 20px 0; background: #222; border-radius: 8px; }
+      .ok { color: #8f8; }
+      .fail { color: #f88; }
+      .unknown { color: #ff8; }
+      h1 { color: #6cf; }
+    </style>
+  </head>
+  <body>
+    <h1>MindForge Orchestrator — Meta Dashboard</h1>
 
-  <script>
-    async function load() {
-      const res = await fetch('./meta-dashboard.json');
-      const data = await res.json();
+    <script>
+      async function load() {
+        const res = await fetch('./meta-dashboard.json');
+        const data = await res.json();
 
-      document.body.innerHTML += `<p>Generated at: ${data.generated_at}</p>`;
+        document.body.innerHTML += `<p>Generated at: ${data.generated_at}</p>`;
 
-      for (const [key, repo] of Object.entries(data.repos)) {
-        document.body.innerHTML += `
-          <div class="repo">
-            <div class="title">${repo.repo}</div>
-            <div>Status: <span>${repo.workflow_build || repo.self_test}</span></div>
-          </div>
-        `;
+        Object.entries(data.repos).forEach(([id, r]) => {
+          const color =
+            r.status === "success"
+              ? "ok"
+              : r.status === "failure"
+              ? "fail"
+              : "unknown";
+
+          document.body.innerHTML += `
+            <div class="repo">
+              <h2>${r.display_name}</h2>
+              <p><strong>Repository:</strong> ${r.repo}</p>
+              <p><strong>Workflow:</strong> ${r.workflow}</p>
+              <p><strong>Status:</strong> <span class="${color}">${r.status}</span></p>
+            </div>
+          `;
+        });
       }
-    }
-    load();
-  </script>
-
-</body>
+      load();
+    </script>
+  </body>
 </html>

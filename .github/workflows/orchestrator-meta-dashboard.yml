@@ -4,7 +4,7 @@ name: Orchestrator • Meta Dashboard Build
 
 on:
   schedule:
-    - cron: "0 * * * *"   # hourly
+    - cron: "0 * * * *"
   workflow_dispatch: {}
 
 permissions:
@@ -32,44 +32,43 @@ jobs:
         run: |
           mkdir -p meta-dashboard
 
-          # Gather workflow status via GitHub API
-          # Core workflow status
-          CORE_STATUS=$(
-            gh api \
-              "$(printf '%s' \
-                repos/garybayes/mindforge-orchestrator-core \
-                /actions/workflows/build.yml/runs)" \
-              --jq '.workflow_runs[0].conclusion'
-          )
+          repos=$(jq -c '.repositories[]' meta-dashboard/repos.json)
 
-          # Orchestrator App self-test status
-          APP_SELFTEST=$(
-            gh api \
-              "$(printf '%s' \
-                repos/garybayes/mindforge-orchestrator \
-                /actions/workflows/orchestrator-self-test.yml/runs)" \
-              --jq '.workflow_runs[0].conclusion'
-          )
+          OUTPUT="{\"generated_at\":\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\","
+          OUTPUT="$OUTPUT\"meta_version\":\"1.1.0\",\"repos\":{"
 
-          # Generate file
-          cat > meta-dashboard/meta-dashboard.json <<EOF
-          {
-            "generated_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
-            "meta_version": "1.0.0",
-            "repos": {
-              "orchestrator_core": {
-                "repo": "garybayes/mindforge-orchestrator-core",
-                "workflow_build": "$CORE_STATUS"
-              },
-              "orchestrator_app": {
-                "repo": "garybayes/mindforge-orchestrator",
-                "self_test": "$APP_SELFTEST"
-              }
-            }
-          }
-          EOF
+          first_repo=true
 
-      - name: Commit Dashboard
+          for r in $repos; do
+            id=$(echo "$r" | jq -r '.id')
+            owner=$(echo "$r" | jq -r '.owner')
+            repo=$(echo "$r" | jq -r '.repo')
+            workflow=$(echo "$r" | jq -r '.workflow')
+            display=$(echo "$r" | jq -r '.display_name')
+
+            # Construct workflow path
+            WF_PATH="repos/$owner/$repo/actions/workflows/$workflow/runs"
+
+            STATUS=$(gh api "$WF_PATH" --jq '.workflow_runs[0].conclusion')
+
+            if [ "$first_repo" = true ]; then
+              first_repo=false
+            else
+              OUTPUT="$OUTPUT,"
+            fi
+
+            OUTPUT="$OUTPUT\"$id\":{"
+            OUTPUT="$OUTPUT\"repo\":\"$owner/$repo\","
+            OUTPUT="$OUTPUT\"display_name\":\"$display\","
+            OUTPUT="$OUTPUT\"workflow\":\"$workflow\","
+            OUTPUT="$OUTPUT\"status\":\"$STATUS\"}"
+          done
+
+          OUTPUT="$OUTPUT}}"
+
+          echo "$OUTPUT" > meta-dashboard/meta-dashboard.json
+
+      - name: Commit dashboard
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update meta-dashboard.json"
