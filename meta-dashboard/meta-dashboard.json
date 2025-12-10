@@ -1,0 +1,89 @@
+{
+  "generated_at": "2025-01-01T12:00:00Z",
+  "meta_version": "1.0.0",
+
+  "repos": {
+    "orchestrator_core": {
+      "repo": "garybayes/mindforge-orchestrator-core",
+      "milestone": "Orchestrator-Core v1 Stabilization",
+      "status": "in_progress",
+      "build_pass": true,
+      "workflows": {
+        "build": "passing",
+        "release": "passing"
+      },
+      "telemetry": {
+        "errors_last_7d": 0,
+        "events_last_24h": 12
+      },
+      "coverage": {
+        "implementation": 0.80,
+        "stability": 0.75
+      }
+    },
+
+    "orchestrator_app": {
+      "repo": "garybayes/mindforge-orchestrator",
+      "milestone": "Orchestrator App v1 Deployment",
+      "status": "in_progress",
+      "workflows": {
+        "issue_events": "passing",
+        "nightly_sweep": "passing",
+        "dashboard_build": "passing",
+        "self_test": "warning"
+      },
+      "telemetry": {
+        "errors_last_7d": 1,
+        "events_last_24h": 18
+      },
+      "coverage": {
+        "workflows": 0.65,
+        "docs": 0.60
+      }
+    },
+
+    "saas_app": {
+      "repo": "garybayes/saas-app",
+      "milestone": "Replace Codex With Orchestrator",
+      "status": "pending",
+      "codex_removed": false,
+      "orchestrator_installed": false,
+      "workflows_validated": false,
+      "telemetry_ready": false
+    },
+
+    "book_repo": {
+      "repo": "garybayes/remote-workers-surival-guide",
+      "milestone": "Orchestrator Integration for Book",
+      "status": "not_started"
+    }
+  },
+
+  "cross_repo_health": {
+    "telemetry_consistency": 0.70,
+    "workflow_consistency": 0.60,
+    "schema_alignment": 0.80,
+    "dashboard_quality": 0.65
+  },
+
+  "critical_path": {
+    "core_stable": true,
+    "workflows_stable": false,
+    "saas_app_ready": false,
+    "book_ready": false,
+    "marketplace_ready": false
+  },
+
+  "alerts": [
+    {
+      "level": "warning",
+      "repo": "mindforge-orchestrator",
+      "message": "Self-test workflow reported 1 warning in last run."
+    },
+    {
+      "level": "info",
+      "repo": "mindforge-orchestrator-core",
+      "message": "Core workflows stable for 72 hours."
+    }
+  ]
+}

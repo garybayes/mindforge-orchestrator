@@ -1,0 +1,74 @@
+---
+# yamllint disable rule:truthy
+name: Orchestrator • Meta Dashboard Build
+
+on:
+  schedule:
+    - cron: "0 * * * *"   # hourly
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  build-meta-dashboard:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Build meta-dashboard.json
+        run: |
+          mkdir -p meta-dashboard
+
+          # Gather workflow status via GitHub API
+          # Core workflow status
+          CORE_STATUS=$(
+            gh api \
+              "$(printf '%s' \
+                repos/garybayes/mindforge-orchestrator-core \
+                /actions/workflows/build.yml/runs)" \
+              --jq '.workflow_runs[0].conclusion'
+          )
+
+          # Orchestrator App self-test status
+          APP_SELFTEST=$(
+            gh api \
+              "$(printf '%s' \
+                repos/garybayes/mindforge-orchestrator \
+                /actions/workflows/orchestrator-self-test.yml/runs)" \
+              --jq '.workflow_runs[0].conclusion'
+          )
+
+          # Generate file
+          cat > meta-dashboard/meta-dashboard.json <<EOF
+          {
+            "generated_at": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "meta_version": "1.0.0",
+            "repos": {
+              "orchestrator_core": {
+                "repo": "garybayes/mindforge-orchestrator-core",
+                "workflow_build": "$CORE_STATUS"
+              },
+              "orchestrator_app": {
+                "repo": "garybayes/mindforge-orchestrator",
+                "self_test": "$APP_SELFTEST"
+              }
+            }
+          }
+          EOF
+
+      - name: Commit Dashboard
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update meta-dashboard.json"
+          add_options: '--all'
