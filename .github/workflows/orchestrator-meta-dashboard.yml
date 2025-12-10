@@ -57,13 +57,10 @@ jobs:
         run: |
           mkdir -p meta-dashboard
 
-          repos=$(jq -c '.repositories[]' \
-            "./meta-dashboard/repos.json")
-
           echo '{}' > meta-dashboard/meta-dashboard.json
 
           jq \
-            --arg ts "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" \
+            --arg ts "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
             '. + {
               generated_at: $ts,
               meta_version: "1.1.0",
@@ -71,17 +68,21 @@ jobs:
             }' \
             meta-dashboard/meta-dashboard.json \
             > meta-dashboard/tmp.json
-          mv meta-dashboard/tmp.json meta-dashboard/meta-dashboard.json
 
-          for r in $repos; do
+          mv meta-dashboard/tmp.json \
+            meta-dashboard/meta-dashboard.json
+
+          jq -c '.repositories[]' \
+            "./meta-dashboard/repos.json" |
+          while read -r r; do
             id=$(echo "$r" | jq -r '.id')
             owner=$(echo "$r" | jq -r '.owner')
             repo=$(echo "$r" | jq -r '.repo')
             workflow=$(echo "$r" | jq -r '.workflow')
             display=$(echo "$r" | jq -r '.display_name')
 
-            WF_PATH="repos/$owner/$repo/actions/workflows"
-            WF_PATH="$WF_PATH/$workflow/runs"
+            WF1="repos/$owner/$repo/actions/workflows"
+            WF_PATH="$WF1/$workflow/runs"
 
             STATUS=$(gh api "$WF_PATH" \
               --jq '.workflow_runs[0].conclusion' \
@@ -106,7 +107,7 @@ jobs:
               meta-dashboard/meta-dashboard.json
           done
 
-          echo "FINAL DASHBOARD JSON:"
+          echo "FINAL:"
           cat meta-dashboard/meta-dashboard.json
 
       - name: Commit Dashboard
