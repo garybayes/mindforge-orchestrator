@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "node dist/app/server.js",
+    "dev": "ts-node src/app/server.ts"
+  },
+  "dependencies": {
+    "@octokit/webhooks": "^14.2.0",
+    "express": "^5.2.1",
+    "mindforge-orchestrator-core": "file:../mindforge-orchestrator-core",
+    "octokit": "^5.0.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "ts-node": "^10.9.2"
+  }
+}
