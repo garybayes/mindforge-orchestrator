@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { webhooks } from "../webhooks";
+import type { Request, Response } from "express";
+import { webhooks } from "../webhooks.ts";
 
 export async function githubWebhookRoute(req: Request, res: Response) {
   try {

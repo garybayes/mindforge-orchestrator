@@ -1,16 +1,24 @@
 {
+  "name": "mindforge-orchestrator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "node dist/app/server.js",
-    "dev": "ts-node src/app/server.ts"
+    "dev": "ts-node --esm src/app/server.ts",
+    "build": "tsc",
+    "start": "node dist/app/server.js"
   },
   "dependencies": {
     "@octokit/webhooks": "^14.2.0",
+    "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "mindforge-orchestrator-core": "file:../mindforge-orchestrator-core",
     "octokit": "^5.0.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "ts-node": "^10.9.2"
+    "@types/node": "^20.19.26",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

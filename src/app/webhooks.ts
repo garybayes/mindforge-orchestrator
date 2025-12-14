@@ -1,27 +1,44 @@
+// src/app/webhooks.ts
+
 import { Webhooks } from "@octokit/webhooks";
-import { App } from "octokit";
-import { loadEnv } from "./env";
-import { dispatchIssueEvent } from "./dispatcher";
+import type { Octokit } from "octokit";
+import { App } from "@octokit/app";
+import { loadEnv } from "./env.js";
+import { dispatchIssueEvent } from "./dispatcher.js";
 
 const env = loadEnv();
 
-export const app = new App({
-  appId: env.APP_ID,
-  privateKey: env.PRIVATE_KEY,
+/**
+ * GitHub App instance
+ * Used to generate installation-scoped Octokit clients
+ */
+export const githubApp = new App({
+  appId: env.GITHUB_APP_ID,                // ✅ MUST be number
+  privateKey: env.GITHUB_APP_PRIVATE_KEY,  // ✅ PEM string
   webhooks: {
-    secret: env.WEBHOOK_SECRET
+    secret: env.GITHUB_WEBHOOK_SECRET
   }
 });
 
+/**
+ * Webhook handler
+ */
 export const webhooks = new Webhooks({
-  secret: env.WEBHOOK_SECRET
+  secret: env.GITHUB_WEBHOOK_SECRET
 });
 
-// Handle incoming issue events
-webhooks.on("issues", async (event) => {
-  const { repository, installation, payload } = event;
+/**
+ * Issue event handler
+ */
+webhooks.on("issues", async ({ payload }) => {
+  const { repository, installation } = payload;
 
-  const octokit = await app.getInstallationOctokit(
+  if (!repository || !installation) {
+    throw new Error("Missing repository or installation in webhook payload");
+  }
+
+  // Installation-scoped Octokit
+  const octokit = await githubApp.getInstallationOctokit(
     installation.id
   );
 
@@ -29,7 +46,7 @@ webhooks.on("issues", async (event) => {
   const repo = repository.name;
 
   await dispatchIssueEvent(
-    { octokit, owner, repo },
+    { owner, repo },
     payload
   );
 });
