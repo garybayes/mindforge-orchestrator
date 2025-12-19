@@ -199,3 +199,10 @@ Open an issue on GitHub
 📄 License
 MIT License.
 
+## NON-GOALS
+* Core does not run itself
+* Installing core ≠ installing App
+* App owns auth, core owns logic
+
+## NOTES
+✅ GitHub App installed, webhook verified, issue automation live.
