@@ -1,13 +1,13 @@
-# MindForge Orchestrator  
+# Automated Task Assistant  
 ### GitHub App · Automated Workflows · Repo Hygiene · Dashboards
 
-MindForge Orchestrator is a GitHub App that automates repository hygiene, sprint consistency,  
+Automated Task Assistant is a GitHub App that automates repository hygiene, sprint consistency,  
 and issue lifecycle management using a rules-based workflow engine.
 
 It applies **track labels**, enforces **milestones**, generates **telemetry**, and produces  
 a real-time **dashboard.json** inside your repository — with zero external dependencies.
 
-Orchestrator gives your team clarity, consistency, and visibility across your development workflow.
+Automated Task Assistant gives your team clarity, consistency, and visibility across your development workflow.
 
 ---
 
@@ -51,7 +51,7 @@ No cloud backend is required.
 
 # 🛠 Installation
 
-1. Install the **MindForge Orchestrator GitHub App** (coming soon).  
+1. Install the **Automated Task Assistant GitHub App** (coming soon).  
 2. Create the configuration file:
 
 .github/orchestrator.yml
