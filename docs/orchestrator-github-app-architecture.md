@@ -13,7 +13,7 @@ Minimal configuration required.
 Key idea:
 The GitHub App is the identity + distribution channel, while the orchestrator-core GitHub Action + workflows do the heavy lifting inside each repository.
 
-Future Codex SaaS can plug into this by consuming the same telemetry/webhooks, but is out of scope for Orchestrator 1.0.
+Future Codex SaaS can plug into this by consuming the same telemetry/webhooks, but is out of scope for Task Assistant 1.0.
 
 2. High-Level Architecture
 2.1 Main Components
@@ -49,17 +49,17 @@ Stored in the repository as:
 
 Defines tracks, stale rules, telemetry paths, self-healing options.
 
-orchestrator-core GitHub Action
+task-assistant-core GitHub Action
 
 A separate action repo, e.g.:
 
-automated-assistant-systems/task-assistant-core
+task-assistant-core
 
 Implements classification, milestone enforcement, and telemetry writing.
 
 Called from the workflows with:
 
-uses: automated-assistant-systems/task-assistant-core@v1
+uses: task-assistant-core@v1
 
 Telemetry + Dashboard Files
 
@@ -85,12 +85,12 @@ Aggregate cross-repo telemetry (for Codex SaaS).
 
 Serve org-level dashboards.
 
-Not needed for Orchestrator 1.0.
+Not needed for Task Assistant 1.0.
 
 3. Installation & Onboarding Flow
 3.1 User Flow (from the developer’s POV)
 
-User finds Automated Assistant Systems Task Assistant on GitHub Marketplace.
+User finds Automated Task Assistant on GitHub Marketplace.
 
 Clicks Install → selects organization and repositories.
 
@@ -148,7 +148,7 @@ Only if you want org-level dashboards and settings.
 
 4.2 Webhooks (Configured at App Level)
 
-For Orchestrator 1.0 (no backend), webhooks can be minimal or even unused.
+For Task Assistant 1.0 (no backend), webhooks can be minimal or even unused.
 
 For future SaaS / Codex:
 
@@ -194,7 +194,7 @@ Workflow: .github/workflows/orchestrator-issue-events.yml runs:
 
 Uses actions/checkout@v4.
 
-Calls automated-assistant-systems/task-assistant-core@v1 with:
+Calls task-assistant-core@v1 with:
 
 config-path: .github/orchestrator.yml
 
@@ -359,7 +359,7 @@ Automation failures
 
 Standardized executive dashboards
 
-But none of this is required for Orchestrator 1.0; the repo-local dashboard is enough to be valuable.
+But none of this is required for Task Assistant 1.0; the repo-local dashboard is enough to be valuable.
 
 8. Architecture Summary (In One Paragraph)
 
@@ -383,7 +383,7 @@ Set a placeholder webhook URL for now (or none).
 
 Wire your workflows to use:
 
-uses: automated-assistant-systems/task-assistant-core@v1
+uses: task-assistant-core@v1
 
 
 Finalize .github/orchestrator.yml schema and add a basic example.
