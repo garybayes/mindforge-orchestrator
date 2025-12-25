@@ -1,4 +1,4 @@
-📘 MindForge Orchestrator — Enhancement Backlog (Future Consideration)
+📘 Task Assistant — Enhancement Backlog (Future Consideration)
 
 This is not part of the current sprint.
 These items are parked for later prioritization.
@@ -50,7 +50,7 @@ Add org-wide scanning for active repos
 
 Add GitHub API-based repo inventory
 
-2. Orchestrator Core Enhancements
+2. Task Assistant Core Enhancements
 2.1 Workflow Engine Improvements
 
 Add support for multi-state transitions (Kanban → Backlog → Planned → Active → Review → Done)
@@ -85,12 +85,12 @@ Add local dry-run mode (preview state changes before applying)
 
 Add versioned pipeline schemas
 
-Instrument Orchestrator with self-observability hooks
+Instrument Task Assistant with self-observability hooks
 
 3. GitHub App Enhancements
 3.1 Installation & Configuration
 
-Web-based UI for Orchestrator settings
+Web-based UI for Task Assistant settings
 
 Repo-level and org-level overrides
 
@@ -157,7 +157,7 @@ Workflow templates for common development styles
 
 5. Book Integration Enhancements (Edition 2 or Special Appendix)
 
-Fully documented case study showing Orchestrator running on the book repo
+Fully documented case study showing Task Assistant running on the book repo
 
 Screenshots of dashboard and telemetry
 
@@ -169,7 +169,7 @@ End-to-end workflow design walkthrough
 
 6. Quality-of-Life Enhancements
 
-Add CLI wrapper (orchestratorctl)
+Add CLI wrapper (task-assistantctl)
 
 Add VS Code extension to visualize telemetry
 
