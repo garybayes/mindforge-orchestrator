@@ -1,8 +1,8 @@
-Task Assistant (formerly MindForge Orchestrator) 1.0 — Technical Design Document
+Task Assistant 1.0 — Technical Design Document
 1. Overview
 1.1 Purpose
 
-Task Assistant 1.0 is a GitHub-native automation system that manages:
+Task Assistant (formerly MindForge Orchestrator) 1.0 is a GitHub-native automation system that manages:
 
 Issue & track state machines
 
