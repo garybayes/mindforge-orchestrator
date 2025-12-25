@@ -82,9 +82,9 @@ future DB
 
 This should be:
 
-write-only from orchestrator
+write-only from task assistant
 
-never required for orchestration to succeed
+never required for task assistant to succeed
 
 failure-tolerant
 
@@ -128,7 +128,7 @@ scriptable setup
 
 Marketplace-friendly
 
-Phase 2.6 — Migration: saas-app Codex → Orchestrator
+Phase 2.6 — Migration: saas-app Codex → Task Assistant
 
 Only now do you:
 
