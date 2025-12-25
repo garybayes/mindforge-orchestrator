@@ -193,4 +193,4 @@ Your plan is:
 ✔ Efficient
 ✔ Perfect for your multi-project ecosystem
 
-And 2–3 weeks is the right expectation for a clean, debugged, documented, deployable Orchestrator release.
+And 2–3 weeks is the right expectation for a clean, debugged, documented, deployable Task Assistant release.
