@@ -1,4 +1,4 @@
-import { runCore } from "mindforge-orchestrator-core";
+import { runCore } from "task-assistant-core";
 export async function dispatchIssueEvent(ctx, payload) {
     return runCore({
         owner: ctx.owner,

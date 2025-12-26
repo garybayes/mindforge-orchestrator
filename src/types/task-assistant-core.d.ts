@@ -1,4 +1,4 @@
-declare module "mindforge-orchestrator-core" {
+declare module "task-assistant-core" {
   export function runCore(input: {
     owner: string;
     repo: string;

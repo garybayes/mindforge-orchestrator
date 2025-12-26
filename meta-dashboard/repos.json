@@ -1,32 +1,32 @@
 {
   "repositories": [
     {
-      "id": "orchestrator_core",
-      "owner": "garybayes",
-      "repo": "mindforge-orchestrator-core",
+      "id": "task-assistant_core",
+      "owner": "automated-assistant-systems",
+      "repo": "task-assistant-core",
       "workflow": "build.yml",
       "display_name": "Task Assistant Core Engine"
     },
     {
-      "id": "orchestrator_app",
-      "owner": "garybayes",
-      "repo": "mindforge-orchestrator",
-      "workflow": "orchestrator-self-test.yml",
+      "id": "task_assistant_app",
+      "owner": "automated-assistant-systems",
+      "repo": "task-assistant",
+      "workflow": "task-assistant-self-test.yml",
       "display_name": "Task Assistant GitHub App"
     },
     {
-      "id": "saas_app",
-      "owner": "garybayes",
-      "repo": "saas-app",
+      "id": "work_assistant_saas_app",
+      "owner": "automated-assistant-systems",
+      "repo": "work-assistant",
       "workflow": "build-and-test.yml",
       "display_name": "Work Assistant SaaS Platform"
     },
     {
-      "id": "book_repo",
-      "owner": "garybayes",
-      "repo": "remote-workers-survival-guide",
-      "workflow": "orchestrator-self-test.yml",
-      "display_name": "Book Workflow Automation"
+      "id": "RWG_book_repo",
+      "owner": "automated-assistant-systems",
+      "repo": "remote-workers-guide",
+      "workflow": "task-assistant-self-test.yml",
+      "display_name": "RWG Book Workflow Automation"
     }
   ]
 }

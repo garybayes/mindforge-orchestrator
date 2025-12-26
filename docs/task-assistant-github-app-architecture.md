@@ -1,4 +1,4 @@
-Task Assistant (formerly MindForge Orchestrator) GitHub App — Architecture
+Task Assistant GitHub App — Architecture
 1. Purpose & Scope
 
 Goal:
@@ -11,7 +11,7 @@ Repo gets state-machine-based workflows, telemetry, and dashboards →
 Minimal configuration required.
 
 Key idea:
-The GitHub App is the identity + distribution channel, while the orchestrator-core GitHub Action + workflows do the heavy lifting inside each repository.
+The GitHub App is the identity + distribution channel, while the task-assistant-core GitHub Action + workflows do the heavy lifting inside each repository.
 
 Future Codex SaaS can plug into this by consuming the same telemetry/webhooks, but is out of scope for Task Assistant 1.0.
 
@@ -30,13 +30,13 @@ Repo-Level Workflows (Task Assistant Bundle)
 
 Stored in .github/workflows/ in the user’s repo:
 
-orchestrator-issue-events.yml
+task-assistant-issue-events.yml
 
-orchestrator-nightly-sweep.yml
+task-assistant-nightly-sweep.yml
 
-orchestrator-dashboard-build.yml
+task-assistant-dashboard-build.yml
 
-orchestrator-self-test.yml
+task-assistant-self-test.yml
 
 Trigger on issues events + schedule + workflow_dispatch.
 
@@ -44,7 +44,7 @@ Task Assistant Configuration
 
 Stored in the repository as:
 
-.github/orchestrator.yml
+.github/task-assistant.yml
 
 
 Defines tracks, stale rules, telemetry paths, self-healing options.
@@ -98,7 +98,7 @@ After installation, user is guided to:
 
 Add Task Assistant configuration:
 
-.github/orchestrator.yml
+.github/task-assistant.yml
 
 Add Task Assistant workflows:
 
@@ -190,13 +190,13 @@ Flow:
 
 GitHub emits issues event.
 
-Workflow: .github/workflows/orchestrator-issue-events.yml runs:
+Workflow: .github/workflows/task-assistant-issue-events.yml runs:
 
 Uses actions/checkout@v4.
 
 Calls task-assistant-core@v1 with:
 
-config-path: .github/orchestrator.yml
+config-path: .github/task-assistant.yml
 
 task-assistant-core:
 
@@ -237,15 +237,15 @@ logged as a telemetry event.
 5.2 Nightly Sweep Flow
 
 Trigger:
-orchestrator-nightly-sweep.yml via schedule or manual dispatch.
+task-assistant-nightly-sweep.yml via schedule or manual dispatch.
 
 Flow:
 
 Checkout repo.
 
-Load .github/orchestrator.yml.
+Load .github/task-assistant.yml.
 
-Sweep logic (via orchestrator-core or separate script):
+Sweep logic (via task-assistant-core or separate script):
 
 For each open issue:
 
@@ -269,7 +269,7 @@ Optionally trigger dashboard rebuild.
 
 Trigger:
 
-orchestrator-dashboard-build.yml via schedule or manual.
+task-assistant-dashboard-build.yml via schedule or manual.
 
 Flow:
 
@@ -292,11 +292,11 @@ If using gh-pages, ensure dashboard/index.html reads that JSON.
 5.4 Self-Test Flow
 
 Trigger:
-orchestrator-self-test.yml workflow_dispatch.
+task-assistant-self-test.yml workflow_dispatch.
 
 Flow:
 
-Verify .github/orchestrator.yml exists and parses.
+Verify .github/task-assistant.yml exists and parses.
 
 Confirm telemetry/ and dashboard/ directories exist or can be created.
 
@@ -363,7 +363,7 @@ But none of this is required for Task Assistant 1.0; the repo-local dashboard is
 
 8. Architecture Summary (In One Paragraph)
 
-Task Assistant GitHub App is the installable identity that connects to a repository. Inside that repository, a set of Task Assistant workflows call the task-assistant-core GitHub Action, which reads .github/orchestrator.yml, enforces consistent track/milestone rules, performs self-healing where allowed, and writes telemetry into telemetry/. A dashboard build workflow then aggregates this telemetry into dashboard/dashboard.json, which can power a GitHub Pages or static dashboard. The App’s webhooks and installation context become the foundation for a future Codex SaaS, but Task Assistant 1.0 runs fully within GitHub with no external infrastructure.
+Task Assistant GitHub App is the installable identity that connects to a repository. Inside that repository, a set of Task Assistant workflows call the task-assistant-core GitHub Action, which reads .github/task-assistant.yml, enforces consistent track/milestone rules, performs self-healing where allowed, and writes telemetry into telemetry/. A dashboard build workflow then aggregates this telemetry into dashboard/dashboard.json, which can power a GitHub Pages or static dashboard. The App’s webhooks and installation context become the foundation for a future Codex SaaS, but Task Assistant 1.0 runs fully within GitHub with no external infrastructure.
 
 9. Practical Next Steps
 
@@ -386,7 +386,7 @@ Wire your workflows to use:
 uses: task-assistant-core@v1
 
 
-Finalize .github/orchestrator.yml schema and add a basic example.
+Finalize .github/task-assistant.yml schema and add a basic example.
 
 Run the Self-Test workflow in your own repo to validate end-to-end.
 

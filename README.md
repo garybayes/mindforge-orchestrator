@@ -1,7 +1,7 @@
 # Task Assistant  
 ### GitHub App · Automated Workflows · Repo Hygiene · Dashboards
 
-Task Assistant (formerly Mindforge Orchestrator) is a GitHub App that automates repository hygiene, sprint consistency,  
+Task Assistant is a GitHub App that automates repository hygiene, sprint consistency,  
 and issue lifecycle management using a rules-based workflow engine.
 
 It applies **track labels**, enforces **milestones**, generates **telemetry**, and produces  
@@ -54,7 +54,7 @@ No cloud backend is required.
 1. Install the **Task Assistant GitHub App** (coming soon).  
 2. Create the configuration file:
 
-.github/orchestrator.yml
+.github/task-assistant.yml
 
 yaml
 Copy code
@@ -81,10 +81,10 @@ stale:
 
 Add the Task Assistant workflows:
 .github/workflows/
-  orchestrator-issue-events.yml
-  orchestrator-nightly-sweep.yml
-  orchestrator-dashboard-build.yml
-  orchestrator-self-test.yml
+  task-assistant-issue-events.yml
+  task-assistant-nightly-sweep.yml
+  task-assistant-dashboard-build.yml
+  task-assistant-self-test.yml
 
 Run the Self-Test workflow:
 
@@ -108,8 +108,10 @@ This validates labels, telemetry directories, config parsing, and permissions.
                │ calls
                ▼
 ┌──────────────────────────────────────────┐
-│   orchestrator-core (GitHub Action)      │
-│   https://github.com/garybayes/mindforge │
+│   task-assistant-core (GitHub Action)    │
+│   https://github.com/
+              automated-assistant-systems/
+              task-assistant-core          │
 │   - classification                       │
 │   - milestone logic                      │
 │   - stale handling                       │
@@ -129,7 +131,7 @@ This architecture keeps everything inside GitHub, fully portable and team-friend
 📁 Repository Structure
 Copy code
 .github/
-  orchestrator.yml
+  task-assistant.yml
   workflows/
 dashboard/
 telemetry/
@@ -154,10 +156,10 @@ Future MindForge SaaS
 This project relies on:
 
 Task Assistant Core (GitHub Action)
-https://github.com/garybayes/mindforge-orchestrator-core
+https://github.com/automated-assistant-systems/task-assistant-core
 
 Add the Action to your workflows using:
-uses: garybayes/mindforge-orchestrator-core@v1
+uses: automated-assistant-systems/task-assistant-core@v1
 
 🧪 Self-Test Workflow
 Task Assistant includes a self-diagnostic workflow that checks:

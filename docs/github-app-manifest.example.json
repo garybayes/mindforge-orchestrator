@@ -1,10 +1,10 @@
 {
-  "name": "MindForge-Orchestrator",
-  "url": "https://github.com/garybayes",
+  "name": "Task-Assistant",
+  "url": "https://github.com/automated-assistant-system",
   "hook_attributes": {
     "url": "https://your-server-domain.com/github/webhook"
   },
-  "redirect_url": "https://github.com/apps/mindforge-orchestrator/installations/new",
+  "redirect_url": "https://github.com/apps/task-assistant/installations/new",
   "callback_urls": [],
   "public": false,
   "default_permissions": {

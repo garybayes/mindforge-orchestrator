@@ -44,13 +44,13 @@ Tasks
 
 Validate all 4 workflows:
 
-orchestrator-issue-events.yml
+task-assistant-issue-events.yml
 
-orchestrator-nightly-sweep.yml
+task-assistant-nightly-sweep.yml
 
-orchestrator-dashboard-build.yml
+task-assistant-dashboard-build.yml
 
-orchestrator-self-test.yml
+task-assistant-self-test.yml
 
 Fix permissions issues (remove invalid keys like metadata)
 
@@ -76,7 +76,7 @@ Tasks
 
 Install the GitHub App
 
-Add orchestrator.yml
+Add task-assistant.yml
 
 Add workflows
 
@@ -136,7 +136,7 @@ Task Assistant 1.0 is now test-deployable
 
 Run Task Assistant on real repos
 
-Retire Codex from SaaS-App
+Retire Codex from Work Assistant (formerly SaaS-App)
 
 Validate Task Assistant under high complexity
 
@@ -153,7 +153,7 @@ Deploy into:
 
 Tasks
 
-Add orchestrator.yml tuned for internal repos
+Add task-assistant.yml tuned for internal repos
 
 Test:
 
@@ -175,7 +175,7 @@ No infinite loops
 
 All telemetry directory writes succeed
 
-Day 10–12 — SaaS-App Migration
+Day 10–12 — Work Assistant Migration
 
 Tasks
 
@@ -183,7 +183,7 @@ Remove old Codex workflows
 
 Install Task Assistant App
 
-Add workflows and orchestrator.yml
+Add workflows and task-assistant.yml
 
 Validate track rules:
 
@@ -205,7 +205,7 @@ Resolve file conflicts (telemetry merges)
 
 Exit Criteria
 
-SaaS-App repo operates exclusively under Task Assistant
+Work Assistant repo operates exclusively under Task Assistant
 
 All tests pass
 

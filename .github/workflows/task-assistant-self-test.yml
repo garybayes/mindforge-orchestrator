@@ -1,5 +1,5 @@
 ---
-name: Orchestrator • Self-Test
+name: Task Assistant • Self-Test
 
 # yamllint disable rule:truthy
 on:
@@ -20,9 +20,9 @@ jobs:
       - name: Validate config file
         id: config
         run: |
-          echo "Checking for .github/orchestrator.yml"
-          if [ ! -f ".github/orchestrator.yml" ]; then
-            echo "::error file=.github/orchestrator.yml::Missing orchestrator.yml"
+          echo "Checking for .github/task-assistant.yml"
+          if [ ! -f ".github/task-assistant.yml" ]; then
+            echo "::error file=.github/task-assistant.yml::Missing task-assistant.yml"
             exit 1
           fi
           echo "::notice::Config file found"
@@ -45,7 +45,7 @@ jobs:
 
       - name: Commit Diagnostics
         run: |
-          git config user.name "orchestrator-bot"
+          git config user.name "task-assistant-bot"
           git config user.email "actions@github.com"
           git add telemetry/diagnostics.json
           git commit -m "Update diagnostics" || echo "No changes"

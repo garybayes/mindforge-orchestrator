@@ -1,6 +1,6 @@
 ---
 # yamllint disable rule:truthy
-name: Orchestrator • Meta Dashboard Build
+name: Task Assistant • Meta Dashboard Build
 
 on:
   schedule:

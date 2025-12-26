@@ -70,7 +70,7 @@ Telemetry becomes more complex → better validation
 
 Outcome: Internal dogfooding validates real-world workflows.
 
-PHASE 4 — Replace Codex inside SaaS-App Repo
+PHASE 4 — Replace Codex inside Work-Assistant (formerly SaaS-App) Repo
 
 You will:
 
@@ -78,7 +78,7 @@ Deprecate Codex workflows
 
 Install Task Assistant GitHub App
 
-Add orchestrator.yml tuned for SaaS-App
+Add task-assistant.yml tuned for work-assistant
 
 Validate track states (sprint/bug/backlog)
 
@@ -86,7 +86,7 @@ Confirm dashboard correctness
 
 This is a critical step because:
 
-✔ SaaS-App is a highly active repo
+✔ Work Assistant is a highly active repo
 ✔ It includes multiple workflows
 ✔ Complexity exposes missed edge cases
 ✔ It validates Task Assistant on a real product development cycle
@@ -139,13 +139,13 @@ Outcome: Automated Task Assistant becomes a public GitHub App.
 
 Assuming ~1–3 hours per evening and weekends:
 
-Phase	Duration	Notes
+Phase			Duration	Notes
 Phase 1 — Stabilization	3–7 days	Most work already done
-Phase 2 — Test Repo Deploy	1 day	Mostly validation
+Phase 2 — Test Repo Deploy 1 day	Mostly validation
 Phase 3 — Dogfooding	1–2 days	Issues shake out quickly
-Phase 4 — SaaS-App integration	3–5 days	Complex repo = best test
-Phase 5 — Book Repo	1 day	Simple repo
-Phase 6 — Marketplace Release	2–4 days	Branding + paperwork
+Phase 4 — Work Assistant integration 3–5 days	Complex repo = best test
+Phase 5 — Book Repo	1 day		Simple repo
+Phase 6 — Marketplace Release 2–4 days	Branding + paperwork
 🎯 Total realistic timeline: 2–3 weeks
 
 (with light-to-moderate daily effort)
@@ -170,7 +170,7 @@ Risk 4 — recursive Task Assistant installs can cause double-firing workflows
 Fix: Use App → Action separation (already implemented).
 Workflows run normally.
 
-Risk 5 — SaaS-App complexity may expose race conditions
+Risk 5 — work-assistant complexity may expose race conditions
 
 Fix: Enable safe-guarding in task-assistant-core for missing fields.
 
@@ -178,7 +178,7 @@ Fix: Enable safe-guarding in task-assistant-core for missing fields.
 [██████████░░░░░░] Phase 1 — Stabilization
 [░░░░░░░░░░██████] Phase 2 — Test Repo Deployment
 [░░░░░░██████████] Phase 3 — Dogfooding
-[░░██████████████] Phase 4 — SaaS-App Migration
+[░░██████████████] Phase 4 — Work Assistant Migration
 [██████░░░░░░░░░░] Phase 5 — Book Repo Integration
 [██████████░░░░░░] Phase 6 — Marketplace Release
 

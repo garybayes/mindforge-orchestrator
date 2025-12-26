@@ -187,7 +187,7 @@ Core handles everything else
 
 ✅ Webhook deliveries visible in ngrok inspector
 
-✅ GitHub App installed on orchestrator repo
+✅ GitHub App installed on task assistant repo
 
 ✅ Issue creation triggers processing
 

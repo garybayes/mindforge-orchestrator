@@ -2,7 +2,7 @@ Task Assistant 1.0 — Technical Design Document
 1. Overview
 1.1 Purpose
 
-Task Assistant (formerly MindForge Orchestrator) 1.0 is a GitHub-native automation system that manages:
+Task Assistant 1.0 is a GitHub-native automation system that manages:
 
 Issue & track state machines
 
@@ -58,7 +58,7 @@ No Slack/Teams notifications (optional extension later).
 
 Configuration
 
-.github/orchestrator.yml with tracks, milestones, thresholds.
+.github/task-assistant.yml with tracks, milestones, thresholds.
 
 Optional repo variables / secrets.
 
@@ -84,7 +84,7 @@ Static dashboard UI from GitHub Pages using dashboard/index.html.
 
 Diagnostics
 
-Self-test workflow (orchestrator-self-test.yml).
+Self-test workflow (task-assistant-self-test.yml).
 
 Diagnostics output in telemetry/diagnostics.json.
 
@@ -117,7 +117,7 @@ Call Task Assistant’s logic (containerized or composite actions).
 
 Config & Rules
 
-.github/orchestrator.yml — single source of truth for:
+.github/task-assistant.yml — single source of truth for:
 
 Tracks
 
@@ -208,7 +208,7 @@ Writes events & updates dashboard.
 
 Scenario
 
-Maintainer runs orchestrator-self-test.yml.
+Maintainer runs task-assistant-self-test.yml.
 
 Task Assistant:
 
@@ -221,11 +221,11 @@ Confirms telemetry & dashboard write permissions.
 Outputs pass/fail diagnostics.
 
 4. Detailed Component Design
-4.1 Configuration: .github/orchestrator.yml
+4.1 Configuration: .github/task-assistant.yml
 
 Location
 
-.github/orchestrator.yml
+.github/task-assistant.yml
 
 
 Schema (v1.0)
@@ -317,7 +317,7 @@ Branding and configuration entry point.
 
 We define a minimal set of workflows that are Task Assistant 1.0.
 
-4.3.1 orchestrator-issue-events.yml
+4.3.1 task-assistant-issue-events.yml
 
 Trigger
 
@@ -328,7 +328,7 @@ on:
 
 Responsibilities
 
-Load .github/orchestrator.yml.
+Load .github/task-assistant.yml.
 
 Classify issue into track.
 
@@ -352,9 +352,9 @@ Implementation
 
 As a composite GitHub Action or container action:
 
-actions/orchestrator-issue-processor@v1.
+actions/task-assistant-issue-processor@v1.
 
-4.3.2 orchestrator-nightly-sweep.yml
+4.3.2 task-assistant-nightly-sweep.yml
 
 Trigger
 
@@ -385,7 +385,7 @@ telemetry/sweeps/{date}.json.
 
 Regenerate dashboard/dashboard.json.
 
-4.3.3 orchestrator-dashboard-build.yml
+4.3.3 task-assistant-dashboard-build.yml
 
 Trigger
 
@@ -417,7 +417,7 @@ gh-pages branch OR
 
 dashboard folder in default branch (depending on deployment mode).
 
-4.3.4 orchestrator-self-test.yml
+4.3.4 task-assistant-self-test.yml
 
 Trigger
 
@@ -429,7 +429,7 @@ Responsibilities
 
 Validate:
 
-.github/orchestrator.yml exists & parses.
+.github/task-assistant.yml exists & parses.
 
 Required labels exist (e.g., track/sprint, state/stale).
 
@@ -454,12 +454,12 @@ Summary via ::notice:: and ::error:: annotations.
 Primary repo structure for Task Assistant 1.0:
 
 .github/
-  orchestrator.yml
+  task-assistant.yml
   workflows/
-    orchestrator-issue-events.yml
-    orchestrator-nightly-sweep.yml
-    orchestrator-dashboard-build.yml
-    orchestrator-self-test.yml
+    task-assistant-issue-events.yml
+    task-assistant-nightly-sweep.yml
+    task-assistant-dashboard-build.yml
+    task-assistant-self-test.yml
 
 telemetry/
   events/
@@ -591,7 +591,7 @@ Schema
     {
       "id": "config-file-present",
       "status": "pass",
-      "message": ".github/orchestrator.yml exists"
+      "message": ".github/task-assistant.yml exists"
     },
     {
       "id": "required-labels-exist",
@@ -611,11 +611,11 @@ Schema
 
 Trigger: issues.opened or issues.edited.
 
-orchestrator-issue-events.yml runs:
+task-assistant-issue-events.yml runs:
 
 Step 1: Checkout repo.
 
-Step 2: Load .github/orchestrator.yml.
+Step 2: Load .github/task-assistant.yml.
 
 Step 3: Determine track:
 
@@ -767,7 +767,7 @@ Run workflows on pushes to main.
 
 8.4 Self-Test Workflow
 
-orchestrator-self-test.yml acts as a smoke test:
+task-assistant-self-test.yml acts as a smoke test:
 
 Config valid.
 
@@ -779,7 +779,7 @@ Telemetry writable.
 
 Phase 1: Side-by-side
 
-Introduce .github/orchestrator.yml without removing old configs.
+Introduce .github/task-assistant.yml without removing old configs.
 
 Add new workflows with Task Assistant naming.
 
@@ -827,13 +827,13 @@ Telemetry writing.
 
 Draft the four workflows:
 
-orchestrator-issue-events.yml
+task-assistant-issue-events.yml
 
-orchestrator-nightly-sweep.yml
+task-assistant-nightly-sweep.yml
 
-orchestrator-dashboard-build.yml
+task-assistant-dashboard-build.yml
 
-orchestrator-self-test.yml
+task-assistant-self-test.yml
 
 Align your existing Task Assistant telemetry & dashboard to the schemas in §5.
 

@@ -1,7 +1,7 @@
 // src/app/dispatcher.ts
 
 import type { Octokit } from "octokit";
-import { runCore } from "mindforge-orchestrator-core";
+import { runCore } from "task-assistant-core";
 
 export interface DispatchContext {
   owner: string;

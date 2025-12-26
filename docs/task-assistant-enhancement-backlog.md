@@ -40,9 +40,9 @@ Add mini charts / trendlines (using Chart.js or lightweight SVG)
 
 Automatically detect repos that contain:
 
-.github/orchestrator.yml
+.github/task-assistant.yml
 
-.github/workflows/* with orchestrator integration
+.github/workflows/* with task assistant integration
 
 Auto-populate repos.json from a discovery script
 

@@ -1,5 +1,5 @@
 ---
-name: Orchestrator • Issue Events
+name: Task Assistant • Issue Events
 
 # yamllint disable rule:truthy
 on:
@@ -24,22 +24,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Load Orchestrator config
+      - name: Load Task Assistant config
         id: config
         run: |
-          if [ ! -f ".github/orchestrator.yml" ]; then
+          if [ ! -f ".github/task-assistant.yml" ]; then
             echo "Config file missing"
             exit 1
           fi
           echo "Config loaded"
 
       - name: Process Issue Event (stub)
-        id: orchestrator
+        id: task-assistant
         run: |
           echo "Running issue classification"
           echo "Applying track/milestone rules (stub)"
           # Call external action once implemented:
-          # uses: owner/orchestrator-core@v1
+          # uses: owner/task-assistant-core@v1
 
       - name: Write Telemetry Event (stub)
         run: |
@@ -51,7 +51,7 @@ jobs:
       - name: Commit Telemetry
         if: always()
         run: |
-          git config user.name "orchestrator-bot"
+          git config user.name "task-assistant-bot"
           git config user.email "actions@github.com"
           git add telemetry/events/*.json
           git commit -m "Add telemetry event for issue #${{ github.event.issue.number }}" || echo "No changes"
