@@ -1,5 +1,5 @@
 {
-  "name": "mindforge-orchestrator",
+  "name": "task-assistant",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -12,8 +12,8 @@
     "@octokit/webhooks": "^14.2.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "mindforge-orchestrator-core": "file:../mindforge-orchestrator-core",
-    "octokit": "^5.0.5"
+    "octokit": "^5.0.5",
+    "task-assistant-core": "file:../task-assistant-core"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
