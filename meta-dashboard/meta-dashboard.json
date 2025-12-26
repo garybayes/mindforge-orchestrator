@@ -1,8 +1,8 @@
 {
-  "generated_at": "2025-12-26T15:28:55Z",
+  "generated_at": "2025-12-26T17:20:47Z",
   "meta_version": "1.1.0",
   "repos": {
-    "task_assistant_core": {
+    "task-assistant_core": {
       "repo": "automated-assistant-systems/task-assistant-core",
       "display_name": "Task Assistant Core Engine",
       "workflow": "build.yml",
@@ -12,7 +12,7 @@
       "repo": "automated-assistant-systems/task-assistant",
       "display_name": "Task Assistant GitHub App",
       "workflow": "task-assistant-self-test.yml",
-      "status": "success"
+      "status": ""
     },
     "work_assistant_saas_app": {
       "repo": "automated-assistant-systems/work-assistant",
@@ -21,7 +21,7 @@
       "status": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow\",\"status\":\"404\"}unknown"
     },
     "RWG_book_repo": {
-      "repo": "task-assistant-systems/remote-workers-guide",
+      "repo": "automated-assistant-systems/remote-workers-guide",
       "display_name": "RWG Book Workflow Automation",
       "workflow": "task-assistant-self-test.yml",
       "status": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow\",\"status\":\"404\"}unknown"
