@@ -13,7 +13,7 @@ tracks:
 
 milestones:
   sprint_pattern: "Sprint {major}.{minor}"
-  internal_milestone_label: "Codex Internal"
+  internal_milestone_label: "Task Assistant Internal"
   default_sprint_duration_days: 14
 
 stale:
