@@ -72,6 +72,31 @@ labels:
     color: "0052CC"
     description: Issue is pinned
 
+  # managed labels
+  - name: phase-3
+    description: Phase 3 work
+    color: "0E8A16"
+
+  - name: phase-3.1
+    description: Phase 3.1 Telemetry Enhancements
+    color: "1D76DB"
+
+  - name: telemetry
+    description: Telemetry and evidence
+    color: "5319E7"
+
+  - name: enforcement
+    description: Enforcement logic
+    color: "B60205"
+
+  - name: quality-gate
+    description: Quality enforcement gates
+    color: "7057FF"
+
+  - name: marketplace
+    description: Marketplace readiness
+    color: "D93F0B"
+
 # ──────────────────────────────
 # MILESTONE DEFINITIONS
 # Prep script MUST create these
