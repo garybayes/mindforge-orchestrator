@@ -1,37 +1,120 @@
 version: 1
 
+meta:
+  name: Task Assistant
+  description: >
+    Task Assistant configuration defining track semantics, labels,
+    milestones, and enforcement rules. This file is the authoritative
+    contract used by prep and runtime automation.
+
+# ──────────────────────────────
+# TRACK DEFINITIONS
+# ──────────────────────────────
 tracks:
   - id: sprint
     label: track/sprint
-    default_milestone_pattern: "Sprint {major}.{minor}"
+    description: Active sprint work
+    default_milestone_pattern: "Sprint {{sprint}}"
+
   - id: backlog
     label: track/backlog
+    description: Planned but unscheduled work
+
   - id: support
     label: track/support
+    description: User-facing or operational support work
+
   - id: ops
     label: track/ops
+    description: Infrastructure and maintenance tasks
 
+# ──────────────────────────────
+# LABEL DEFINITIONS
+# Prep script MUST create these
+# ──────────────────────────────
+labels:
+  # Track labels (authoritative)
+  - name: track/sprint
+    color: "0052CC"
+    description: Sprint-scoped work
+
+  - name: track/backlog
+    color: "5319E7"
+    description: Backlog work
+
+  - name: track/support
+    color: "FBCA04"
+    description: Support tasks
+
+  - name: track/ops
+    color: "0E8A16"
+    description: Operational work
+
+  # Priority labels
+  - name: priority/high
+    color: "D93F0B"
+    description: High priority
+
+  - name: priority/medium
+    color: "FBCA04"
+    description: Medium priority
+
+  - name: priority/low
+    color: "0E8A16"
+    description: Low priority
+
+  # State labels
+  - name: state/stale
+    color: "CCCCCC"
+    description: Issue is stale
+
+  - name: state/pinned
+    color: "0052CC"
+    description: Issue is pinned
+
+# ──────────────────────────────
+# MILESTONE DEFINITIONS
+# Prep script MUST create these
+# ──────────────────────────────
 milestones:
-  sprint_pattern: "Sprint {major}.{minor}"
-  internal_milestone_label: "Task Assistant Internal"
-  default_sprint_duration_days: 14
+  # Phase milestones (long-running)
+  - title: "Phase 3.1 – Telemetry Enhancements"
+    description: Telemetry schema, evidence capture, and reporting improvements
 
-stale:
-  enabled: true
-  days_until_stale: 14
-  days_until_close: 30
-  stale_label: "state/stale"
-  exclude_labels:
-    - "state/pinned"
-    - "priority/high"
+  - title: "Phase 3.2 – Hygiene & Enforcement"
+    description: Label normalization, track enforcement, and safety rules
 
-telemetry:
-  enabled: true
-  path: "telemetry"
-  dashboard_path: "dashboard/dashboard.json"
+  - title: "Phase 3.3 – UX & Config Experience"
+    description: Repo configuration UX, validation, and onboarding flow
 
-self_healing:
-  enabled: true
-  normalize_labels: true
-  fix_missing_track: true
-  fix_missing_milestone: true
+  - title: "Phase 3.4 – Marketplace Readiness"
+    description: Hardening for GitHub Marketplace release
+
+  - title: "Phase 3.5 – Post-Release Hardening"
+    description: Observability, performance, and edge-case handling
+
+# ──────────────────────────────
+# ENFORCEMENT RULES
+# Runtime + validation expectations
+# ──────────────────────────────
+rules:
+  track_hygiene:
+    single_track_only: true
+    normalize_on_change: true
+
+  milestone_enforcement:
+    sprint_tracks_require_milestone: true
+    non_sprint_tracks_forbid_milestone: true
+
+  idempotency:
+    allow_noop_edits: true
+
+# ──────────────────────────────
+# PREP BEHAVIOR
+# Used explicitly by prep scripts
+# ──────────────────────────────
+prep:
+  create_missing_labels: true
+  create_missing_milestones: true
+  close_removed_milestones: false
+  dry_run_supported: true
