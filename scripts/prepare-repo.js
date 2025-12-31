@@ -56,34 +56,128 @@ if (!fs.existsSync(configPath)) {
 const config = yaml.parse(fs.readFileSync(configPath, "utf8"));
 
 /* ──────────────────────────────
-   Labels
+   Labels — Phase 3 Enforcement
    ────────────────────────────── */
-const existingLabels = JSON.parse(
-  runRead(`gh label list --repo ${repo} --json name`) || "[]"
-).map(l => l.name);
 
-const trackLabels = (config.tracks || []).map(t => t.label);
-
-const systemLabels = [
-  "state/stale",
-  "state/pinned",
-  "priority/high",
-  "priority/medium",
-  "priority/low"
+// ── System labels (hard invariants; NOT in config)
+const SYSTEM_LABELS = [
+  { name: "state/stale", color: "CCCCCC", description: "Issue is stale" },
+  { name: "state/pinned", color: "0052CC", description: "Issue is pinned" },
+  { name: "priority/high", color: "D93F0B", description: "High priority" },
+  { name: "priority/medium", color: "FBCA04", description: "Medium priority" },
+  { name: "priority/low", color: "0E8A16", description: "Low priority" }
 ];
 
-const requiredLabels = [...new Set([...trackLabels, ...systemLabels])];
+// ── Track labels (authoritative; derived from existing tracks schema)
+const TRACK_LABELS = Array.isArray(config.tracks)
+  ? config.tracks
+      .filter(t => t && typeof t.label === "string" && t.label.trim().length > 0)
+      .map(t => ({
+        name: t.label,
+        color: "0052CC",
+        description:
+          typeof t.description === "string" && t.description.trim().length > 0
+            ? t.description.trim()
+            : `Track: ${t.id ?? t.label}`
+      }))
+  : [];
 
-const createdLabels = [];
-const skippedLabels = [];
+// ── Project / phase / outcome labels (from config; EXACTLY as declared)
+const CONFIG_LABELS = Array.isArray(config.labels) ? config.labels : [];
 
-for (const label of requiredLabels) {
-  if (existingLabels.includes(label)) {
-    skippedLabels.push(label);
-  } else {
-    runWrite(`gh label create "${label}" --repo ${repo}`);
-    createdLabels.push(label);
+// ── Merge all declared labels (later sources override earlier ones by name)
+const declaredLabelsMap = new Map();
+for (const l of SYSTEM_LABELS) declaredLabelsMap.set(l.name, l);
+for (const l of TRACK_LABELS) declaredLabelsMap.set(l.name, l);
+for (const l of CONFIG_LABELS) declaredLabelsMap.set(l.name, l);
+
+const declaredLabels = [...declaredLabelsMap.values()];
+
+// ── Existing labels from repo
+const existingLabels = JSON.parse(
+  runRead(`gh label list --repo ${repo} --json name,color,description`) || "[]"
+);
+
+const existingByName = Object.fromEntries(
+  existingLabels.map(l => [
+    l.name,
+    {
+      color: l.color?.toUpperCase(),
+      description: l.description || ""
+    }
+  ])
+);
+
+// ── Build reconciliation plan
+const labelPlan = { create: [], update: [], skip: [] };
+
+for (const label of declaredLabels) {
+  const { name, color, description } = label;
+
+  if (!name || !color || !description) {
+    throw new Error(`Invalid label declaration: ${JSON.stringify(label)}`);
   }
+
+  const existing = existingByName[name];
+
+  if (!existing) {
+    labelPlan.create.push(label);
+    continue;
+  }
+
+  const isConfigLabel = CONFIG_LABELS.some(l => l.name === name);
+
+  const colorDrift =
+    isConfigLabel && existing.color !== color.toUpperCase();
+
+// Only enforce description drift for config-declared labels
+  const descriptionDrift =
+    isConfigLabel && existing.description !== description;
+
+  if (colorDrift || descriptionDrift) {
+    labelPlan.update.push({ ...label, existing });
+  } else {
+    labelPlan.skip.push(name);
+  }
+}
+
+// ── Report plan (always)
+console.log("\nLabel reconciliation plan:");
+
+if (labelPlan.create.length) {
+  console.log("  Labels to create:");
+  labelPlan.create.forEach(l => console.log(`   + ${l.name}`));
+}
+
+if (labelPlan.update.length) {
+  console.log("  Labels to update:");
+  labelPlan.update.forEach(l => console.log(`   ~ ${l.name}`));
+}
+
+if (labelPlan.skip.length) {
+  console.log("  Labels already matching:");
+  labelPlan.skip.forEach(name => console.log(`   = ${name}`));
+}
+
+if (!labelPlan.create.length && !labelPlan.update.length) {
+  console.log("  ✓ All declared labels already match config");
+}
+
+// ── Apply changes (real mode only)
+if (!dryRun) {
+  for (const l of labelPlan.create) {
+    runWrite(
+      `gh label create "${l.name}" --repo ${repo} --color "${l.color}" --description "${l.description}"`
+    );
+  }
+
+  for (const l of labelPlan.update) {
+    runWrite(
+      `gh label edit "${l.name}" --repo ${repo} --color "${l.color}" --description "${l.description}"`
+    );
+  }
+} else {
+  console.log("\nDRY-RUN: No label changes were applied.");
 }
 
 /* ──────────────────────────────
@@ -134,34 +228,6 @@ for (const m of desiredMilestones) {
   );
 
   createdMilestones.push(m.id);
-}
-
-/* ──────────────────────────────
-   Summary
-   ────────────────────────────── */
-console.log("\nPreparation Summary");
-
-if (createdLabels.length) {
-  console.log("Created labels:");
-  createdLabels.forEach(l => console.log(`  - ${l}`));
-}
-if (skippedLabels.length) {
-  console.log("Existing labels:");
-  skippedLabels.forEach(l => console.log(`  - ${l}`));
-}
-
-if (createdMilestones.length) {
-  console.log("Created milestones:");
-  createdMilestones.forEach(m => console.log(`  - ${m}`));
-}
-if (skippedMilestones.length) {
-  console.log("Existing milestones:");
-  skippedMilestones.forEach(m => console.log(`  - ${m}`));
-}
-
-console.log("\nRepo preparation complete.");
-if (dryRun) {
-  console.log("\nDRY-RUN: No changes were made.");
 }
 
 /* ──────────────────────────────
