@@ -73,6 +73,10 @@ labels:
     description: Execution error
     color: "DC3545"
 
+  - name: codex:execute
+    description: Codex Issue Trigger
+    color: "6C757D"
+
 # ──────────────────────────────
 # MILESTONE DEFINITIONS
 # Prep script MUST create these
