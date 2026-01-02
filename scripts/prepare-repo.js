@@ -98,10 +98,13 @@ const existingLabels = JSON.parse(
   runRead(`gh label list --repo ${repo} --json name,color,description`) || "[]"
 );
 
+const normalize = s => s.trim().toLowerCase();
+
 const existingByName = Object.fromEntries(
   existingLabels.map(l => [
-    l.name,
+    normalize(l.name),
     {
+      name: l.name, // preserve original casing
       color: l.color?.toUpperCase(),
       description: l.description || ""
     }

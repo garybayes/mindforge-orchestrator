@@ -35,7 +35,11 @@ const args = parseArgs(process.argv.slice(2));
 
 const repo = args.repo;
 const issueNumber = args.issue;
-const telemetryRepo = args["telemetry-repo"] || "(not configured)";
+const telemetryRepo =
+  args["telemetry-repo"] ||
+  process.env.TELEMETRY_REPO ||
+  "(not configured)";
+console.log(`Raw TELEMETRY_REPO env: ${process.env.TELEMETRY_REPO || "(unset)"}`);
 
 requireArg("repo", repo);
 requireArg("issue", issueNumber);
