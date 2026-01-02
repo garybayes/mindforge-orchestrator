@@ -81,9 +81,13 @@ console.log(`Correlation ID: ${correlationId}`);
 /* ────────────────────────────── */
 
 try {
-  run(
-    `gh issue comment ${issueNumber} --repo ${repo} --body "🤖 **Codex execution started**\n\nCorrelation ID: \`${correlationId}\`"`
+  const bodyFile = path.join(os.tmpdir(), "codex-comment.txt");
+  fs.writeFileSync(
+    bodyFile,
+    `🤖 Codex execution started\n\nCorrelation ID: ${correlationId}`
   );
+
+  run(`gh issue comment ${issueNumber} --repo ${repo} --body-file ${bodyFile}`);
 
   // Future Codex behavior goes here
 
