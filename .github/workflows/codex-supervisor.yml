@@ -16,7 +16,7 @@ permissions:
   contents: write
   issues: write
   pull-requests: write
-  workflows: write
+  actions: read
   statuses: write
 
 jobs:
@@ -42,7 +42,6 @@ jobs:
             const labels = issue.labels.map(l => l.name);
             const hasExecuteLabel = labels.includes("codex:execute");
 
-            // Optional: support slash command
             const comment = context.payload.comment?.body || "";
             const hasSlashCommand = comment.trim().startsWith("/codex execute");
 
@@ -66,8 +65,6 @@ jobs:
           echo "Repository: ${{ github.repository }}"
           echo "Issue URL: ${{ github.event.issue.html_url }}"
 
-          # Placeholder invocation — replace with your Codex runner
-          # This keeps the workflow minimal and explicit
           node scripts/codex/run.js \
             --repo "${{ github.repository }}" \
             --issue "${{ github.event.issue.number }}" \
