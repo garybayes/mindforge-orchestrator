@@ -2,14 +2,18 @@
 /* eslint-disable no-console */
 
 import process from "process";
+import fs from "fs";
+import os from "os";
+import path from "path";
+import crypto from "crypto";
 import { execSync } from "child_process";
 
 /**
- * Minimal Codex runner stub.
- * Purpose:
- * - Prove Codex execution loop end-to-end
- * - Comment back on the triggering issue
- * - Establish a stable entrypoint for future logic
+ * Codex runner with telemetry emission.
+ * Phase 3.1 compliant:
+ * - No host-repo writes
+ * - Append-only telemetry
+ * - Deterministic, observable execution
  */
 
 function parseArgs(argv) {
@@ -31,6 +35,14 @@ function requireArg(name, value) {
   }
 }
 
+function run(cmd) {
+  return execSync(cmd, { stdio: "inherit" });
+}
+
+/* ────────────────────────────── */
+/* Inputs */
+/* ────────────────────────────── */
+
 const args = parseArgs(process.argv.slice(2));
 
 const repo = args.repo;
@@ -38,28 +50,104 @@ const issueNumber = args.issue;
 const telemetryRepo =
   args["telemetry-repo"] ||
   process.env.TELEMETRY_REPO ||
-  "(not configured)";
-console.log(`Raw TELEMETRY_REPO env: ${process.env.TELEMETRY_REPO || "(unset)"}`);
+  null;
 
 requireArg("repo", repo);
 requireArg("issue", issueNumber);
 
-console.log("Codex runner stub starting");
-console.log(`Repo: ${repo}`);
-console.log(`Issue: #${issueNumber}`);
-console.log(`Telemetry repo: ${telemetryRepo}`);
-
-// Comment back on the issue to confirm execution
-try {
-  execSync(
-    `gh issue comment ${issueNumber} --repo ${repo} --body "🤖 **Codex execution stub reached successfully.**\n\nThis confirms:\n- Codex GitHub App is installed\n- Supervisor workflow executed\n- Runner entrypoint is wired correctly\n\nNext step: implement real Codex behavior."`,
-    { stdio: "inherit" }
-  );
-} catch (err) {
-  console.error("Failed to post issue comment");
-  console.error(err.message);
+if (!telemetryRepo) {
+  console.error("TELEMETRY_REPO not configured");
   process.exit(1);
 }
 
-console.log("Codex runner stub completed successfully");
+/* ────────────────────────────── */
+/* Execution Context */
+/* ────────────────────────────── */
+
+const correlationId = crypto.randomUUID();
+const startedAt = new Date().toISOString();
+let outcome = "success";
+let failureReason = null;
+
+console.log("Codex runner starting");
+console.log(`Repo: ${repo}`);
+console.log(`Issue: #${issueNumber}`);
+console.log(`Telemetry repo: ${telemetryRepo}`);
+console.log(`Correlation ID: ${correlationId}`);
+
+/* ────────────────────────────── */
+/* Execution */
+/* ────────────────────────────── */
+
+try {
+  run(
+    `gh issue comment ${issueNumber} --repo ${repo} --body "🤖 **Codex execution started**\n\nCorrelation ID: \`${correlationId}\`"`
+  );
+
+  // Future Codex behavior goes here
+
+} catch (err) {
+  outcome = "failure";
+  failureReason = err.message || String(err);
+  console.error("Codex execution failed");
+  console.error(failureReason);
+} finally {
+  /* ────────────────────────────── */
+  /* Telemetry Write (Always) */
+  /* ────────────────────────────── */
+
+  const telemetry = {
+    schema_version: "1.0",
+    generated_at: new Date().toISOString(),
+    correlation_id: correlationId,
+
+    actor: "codex",
+    action: "codex.execute",
+
+    entity: {
+      type: "issue",
+      repo,
+      number: Number(issueNumber)
+    },
+
+    outcome,
+    reason: failureReason,
+
+    execution: {
+      started_at: startedAt,
+      finished_at: new Date().toISOString(),
+      runner: "scripts/codex/run.js"
+    }
+  };
+
+  const tmpDir = fs.mkdtempSync(
+    path.join(os.tmpdir(), "codex-telemetry-")
+  );
+
+  const outDir = path.join(tmpDir, "codex");
+  fs.mkdirSync(outDir, { recursive: true });
+
+  const fileName = `${telemetry.generated_at.replace(/[:.]/g, "-")}-${correlationId}.json`;
+  const outFile = path.join(outDir, fileName);
+
+  fs.writeFileSync(outFile, JSON.stringify(telemetry, null, 2));
+
+  try {
+    run(`gh repo clone ${telemetryRepo} ${tmpDir}`);
+    run(`git -C ${tmpDir} add .`);
+    run(
+      `git -C ${tmpDir} commit -m "telemetry: codex.execute ${correlationId}"`
+    );
+    run(`git -C ${tmpDir} push`);
+  } catch (telemetryErr) {
+    console.error("Failed to write telemetry");
+    console.error(telemetryErr.message);
+  }
+
+  if (outcome === "failure") {
+    process.exit(1);
+  }
+}
+
+console.log("Codex runner completed");
 process.exit(0);
