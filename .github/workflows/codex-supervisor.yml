@@ -1,0 +1,74 @@
+---
+# yamllint disable rule:truthy
+name: Codex Supervisor
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - labeled
+  issue_comment:
+    types:
+      - created
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+  workflows: write
+  statuses: write
+
+jobs:
+  codex-supervisor:
+    name: Evaluate Codex Execution
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Determine execution intent
+        id: intent
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            if (!issue) {
+              core.setOutput("execute", "false");
+              return;
+            }
+
+            const labels = issue.labels.map(l => l.name);
+            const hasExecuteLabel = labels.includes("codex:execute");
+
+            // Optional: support slash command
+            const comment = context.payload.comment?.body || "";
+            const hasSlashCommand = comment.trim().startsWith("/codex execute");
+
+            const shouldExecute = hasExecuteLabel || hasSlashCommand;
+            core.setOutput("execute", shouldExecute ? "true" : "false");
+
+      - name: Exit if execution not requested
+        if: steps.intent.outputs.execute != 'true'
+        run: |
+          echo "Codex execution not requested. Exiting."
+
+      - name: Invoke Codex
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CODEX_APP_ID: ${{ secrets.CODEX_APP_ID }}
+          CODEX_PRIVATE_KEY: ${{ secrets.CODEX_PRIVATE_KEY }}
+          TELEMETRY_REPO: ${{ secrets.TELEMETRY_REPO }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Starting Codex execution for issue #${{ github.event.issue.number }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Issue URL: ${{ github.event.issue.html_url }}"
+
+          # Placeholder invocation — replace with your Codex runner
+          # This keeps the workflow minimal and explicit
+          node scripts/codex/run.js \
+            --repo "${{ github.repository }}" \
+            --issue "${{ github.event.issue.number }}" \
+            --telemetry-repo "${TELEMETRY_REPO}"
