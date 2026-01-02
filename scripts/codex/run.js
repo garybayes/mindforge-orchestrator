@@ -143,7 +143,6 @@ try {
   run(`git -C ${tmpDir} push`);
 
   try {
-    run(`gh repo clone ${telemetryRepo} ${tmpDir}`);
     run(`git -C ${tmpDir} add .`);
     run(
       `git -C ${tmpDir} commit -m "telemetry: codex.execute ${correlationId}"`

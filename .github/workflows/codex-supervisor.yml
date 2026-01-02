@@ -59,6 +59,7 @@ jobs:
           CODEX_APP_ID: ${{ secrets.CODEX_APP_ID }}
           CODEX_PRIVATE_KEY: ${{ secrets.CODEX_PRIVATE_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
           TELEMETRY_REPO: ${{ vars.TELEMETRY_REPO }}
         run: |
           echo "Starting Codex execution for issue #${{ github.event.issue.number }}"
